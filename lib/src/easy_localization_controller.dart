@@ -1,10 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl_standalone.dart'
+import 'package:intl/intl_standalone.dart' 
     if (dart.library.html) 'package:intl/intl_browser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'translations.dart';
+import 'localization.dart';
 
 class EasyLocalizationController extends ChangeNotifier {
   static Locale? _savedLocale;
@@ -89,7 +90,7 @@ class EasyLocalizationController extends ChangeNotifier {
       if (useFallbackTranslations && _fallbackLocale != null) {
         Map<String, dynamic>? baseLangData;
         if (_locale.countryCode != null && _locale.countryCode!.isNotEmpty) {
-          baseLangData =
+          baseLangData = 
               await loadBaseLangTranslationData(Locale(locale.languageCode));
         }
         data = await loadTranslationData(_fallbackLocale!);
@@ -168,6 +169,14 @@ class EasyLocalizationController extends ChangeNotifier {
 
     await setLocale(_deviceLocale);
   }
+
+  Future<void> reloadLocale() async {
+    await loadTranslations();
+
+    Localization.load(_locale, translations: _translations, fallbackTranslations: _fallbackTranslations);
+
+    EasyLocalization.logger('Reloaded locale');
+  }
 }
 
 @visibleForTesting
@@ -179,8 +188,8 @@ extension LocaleExtension on Locale {
     if (languageCode != locale.languageCode) {
       return false;
     }
-    if (countryCode != null &&
-        countryCode!.isNotEmpty &&
+    if (countryCode != null && 
+        countryCode!.isNotEmpty && 
         countryCode != locale.countryCode) {
       return false;
     }

@@ -229,6 +229,9 @@ class _EasyLocalizationProvider extends InheritedWidget {
   /// Reset locale to platform locale
   Future<void> resetLocale() => _localeState.resetLocale();
 
+  /// Reload the locale
+  Future<void> reloadLocale() => _localeState.reloadLocale();
+
   @override
   bool updateShouldNotify(_EasyLocalizationProvider oldWidget) {
     return oldWidget.currentLocale != locale;
